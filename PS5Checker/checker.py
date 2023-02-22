@@ -10,8 +10,6 @@ Soup = BeautifulSoup(response.content, 'html.parser')
 
 cart_button = Soup.find("button", class_="add-to-cart-button")
 
-#print(Soup.find("button", class_="add-to-cart-button"))
-
 print(cart_button.text) #Finds the text associated with the add-to-cart button
 
 #Checks if the text on the button is "Sold Out".
