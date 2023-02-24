@@ -20,7 +20,7 @@ def main_window():
     layout = [[sg.Text('Select your tool!')],
               [sg.Button('IP Scanner'), sg.Button('Email Checker'), sg.Button('Placeholder')],
               [sg.Exit()]]
-    return sg.Window('My Toolkit', layout, icon=r'C:\Users\AM\PycharmProjects\MyToolkit\icon.ico', grab_anywhere=True)
+    return sg.Window('My Toolkit', layout, icon=r'icon.ico', grab_anywhere=True)
 
 
 
