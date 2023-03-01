@@ -7,30 +7,36 @@ from faker import Faker
 
 fake = Faker()
 
+# Text font + size
+main_f = ('Comic Sans MS', 15)
+main_fs = ('Comic Sans MS', 12)
 
+# PySimpleGUI theme
 sg.theme('DarkBlue17')
 
 # Creates the main window layout with some basic device info
-mainWindowlayout = [[sg.Text('Device Name: ' + platform.node())],
-                    [sg.Text('Operating System: ' + platform.system() + ' ' + platform.release())],
-                    [sg.Text('Version: ' + platform.version())],
-                    [sg.Text('Python Version: ' + platform.python_version())],
-                    [sg.Button('IP Scanner'), sg.Button('Email Checker'), sg.Button('System Info')],
-                    [sg.Button('Fake Info Generator'), sg.Button('Placeholder2'), sg.Button('Placeholder3')],
-                    [sg.Exit()]]
+mainWindowlayout = [[sg.Text('My Toolkit', font=('Comic Sans MS', 20))],
+                    [sg.Text('Device Name: ' + platform.node(), font=main_fs)],
+                    [sg.Text('Operating System: ' + platform.system() + ' ' + platform.release(), font=main_fs)],
+                    [sg.Text('Version: ' + platform.version(), font=main_fs)],
+                    [sg.Text('Python Version: ' + platform.python_version(), font=main_fs)],
+                    [sg.Button('IP Scanner', font=main_fs), sg.Button('Email Checker', font=main_fs), sg.Button('System Info', font=main_fs)],
+                    [sg.Button('Fake Info Generator', font=main_fs), sg.Button('Placeholder2', font=main_fs), sg.Button('Placeholder3', font=main_fs)],
+                    [sg.Exit(font=main_fs)]]
 
 MainWindow = sg.Window('My toolkit', icon=r'icon.ico', grab_anywhere=True).Layout(mainWindowlayout)
 
 
-# Function that creates the main window layout
+# Function that creates the main window when called
 def main_window():
-    layout = [[sg.Text('Device Name: ' + platform.node())],
-                    [sg.Text('Operating System: ' + platform.system() + ' ' + platform.release())],
-                    [sg.Text('Version: ' + platform.version())],
-                    [sg.Text('Python Version: ' + platform.python_version())],
-                    [sg.Button('IP Scanner'), sg.Button('Email Checker'), sg.Button('System Info')],
-                    [sg.Button('Fake Info Generator'), sg.Button('Placeholder2'), sg.Button('Placeholder3')],
-                    [sg.Exit()]]
+    layout = [[sg.Text('My Toolkit', font=('Comic Sans MS', 20))],
+                    [sg.Text('Device Name: ' + platform.node(), font=main_fs)],
+                    [sg.Text('Operating System: ' + platform.system() + ' ' + platform.release(), font=main_fs)],
+                    [sg.Text('Version: ' + platform.version(), font=main_fs)],
+                    [sg.Text('Python Version: ' + platform.python_version(), font=main_fs)],
+                    [sg.Button('IP Scanner', font=main_fs), sg.Button('Email Checker', font=main_fs), sg.Button('System Info', font=main_fs)],
+                    [sg.Button('Fake Info Generator', font=main_fs), sg.Button('Placeholder2', font=main_fs), sg.Button('Placeholder3', font=main_fs)],
+                    [sg.Exit(font=main_fs)]]
     return sg.Window('My Toolkit', layout, icon=r'icon.ico', grab_anywhere=True)
 
 
@@ -45,8 +51,7 @@ while True:
     elif event == 'IP Scanner':
         MainWindow.close()
 
-        ipscannerLayout = [[sg.Text('Enter the ip address you would like to scan: ')], [sg.InputText()], [sg.Button('Submit')],
-                   [sg.Exit()]]
+        ipscannerLayout = [[sg.Text('Enter the ip address you would like to scan: ', font=main_f)], [sg.InputText()], [sg.Button('Submit', font=main_fs), sg.Exit(font=main_fs)]]
 
         IPscannerwindow = sg.Window('IP Scanner', ipscannerLayout, icon=r'icon.ico', grab_anywhere=True)
         event, values2 = IPscannerwindow.Read()
@@ -110,8 +115,11 @@ while True:
 
         MainWindow.close()
 
-        emailcheckerLayout = [[sg.Text('Enter the email you would like to scan: ')], [sg.InputText()], [sg.Button('Submit')],
-                   [sg.Exit()]]
+        emailcheckerLayout = [[sg.Text('Scan for compromised passwords leaked in data breaches.', font=main_fs)],
+                              [sg.Text('Allows you to target a specific email address.', font=main_fs)],
+                              [sg.Text('Please enter the email address you wish to check: ', font=main_fs)],
+                              [sg.InputText()],
+                              [sg.Button('Submit', font=main_fs), sg.Exit(font=main_fs)]]
 
         EmailCheckerWindow = sg.Window('Email Checker', emailcheckerLayout, icon=r'icon.ico', grab_anywhere=True)
 
@@ -149,44 +157,49 @@ while True:
 
 
 
+
     elif event == 'System Info':
 
         MainWindow.close()
 
-        sysinfoLayout = [[sg.Text('Use this tool to gather system information')],
-                   [sg.Text('Click below to gather OS, Architecture, IP addressing, Hotfixes, etc..')],
-                   [sg.Button('Gather!')], [sg.Exit()]]
+        sysinfoLayout = [[sg.Text('Use this tool to gather system information', font=main_f)],
+
+                         [sg.Text('Operating System, Architecture, IP addressing, Hotfixes, Network Cards, DHCP, etc..', font=main_fs)],
+
+                         [sg.Button('Gather', font=main_fs), sg.Exit(font=main_fs)],
+                         [sg.Output(size=(65, 20), font=('Helvetica', 18), key='sysinfo')]]
 
         systeminfowindow = sg.Window('System Info', sysinfoLayout, icon=r'icon.ico', grab_anywhere=True)
-        event, values4 = systeminfowindow.Read()
 
         keepRunning = True
 
         while keepRunning is True:
 
+            event, values4 = systeminfowindow.Read()
+
             if event in (None, 'Exit'):
                 systeminfowindow.close()
+
                 MainWindow = main_window()
+
+                keepRunning = False
+
                 break
 
-            if event in (None, 'Gather!'):
+            if event in (None, 'Gather'):
 
                 Id = subprocess.check_output(['systeminfo']).decode('utf-8').split('\n')
+
                 new = []
 
                 # arrange the string into clear info
+
                 for item in Id:
                     new.append(str(item.split("\r")[:-1]))
 
+                formatted_list = [i[2:-2] for i in new]
 
-                layout = [[sg.Text(i[2:-2])] for i in new]
-                window = sg.Window('test', layout, grab_anywhere=True, icon=r'icon.ico')
-                button, values = window.read()
-
-                systeminfowindow.Close()
-                MainWindow = main_window()
-
-            keepRunning = False
+                print('\n'.join(formatted_list))
 
 
 
@@ -194,12 +207,12 @@ while True:
         MainWindow.close()
 
         fakeinfoLayout = [
-            [sg.Text('Select the information you want to generate:')],
-            [sg.Checkbox('Name', default=False, key='name'), sg.Checkbox('License Plate', default=False, key='license_plate'), sg.Checkbox('Email', default=False, key='email')],
-            [sg.Checkbox('Address', default=False, key='address'), sg.Checkbox('Credit Card', default=False, key='credit_card'), sg.Checkbox('Job title', default=False, key='job_title')],
-            [sg.Checkbox('Phone Number', default=False, key='phone'), sg.Checkbox('Ipv4 addr.', default=False, key='ipv4_addr'), sg.Checkbox('Ipv6 addr.', default=False, key='ipv6_addr')],
-            [sg.Checkbox('Social Security Number', default=False, key='ssn'), sg.Checkbox('Mac Addr.', default=False, key='mac_addr'), sg.Checkbox('Coordinates', default=False, key='latlng')],
-            [sg.Button('Generate'), sg.Button('Exit'), sg.Button('Select/Deselect ALL')],
+            [sg.Text('Select the information you want to generate:', font=main_f)],
+            [sg.Checkbox('Name', default=False, key='name', font=main_fs), sg.Checkbox('License Plate', default=False, key='license_plate', font=main_fs), sg.Checkbox('Email', default=False, key='email', font=main_fs)],
+            [sg.Checkbox('Address', default=False, key='address', font=main_fs), sg.Checkbox('Credit Card', default=False, key='credit_card', font=main_fs), sg.Checkbox('Job title', default=False, key='job_title', font=main_fs)],
+            [sg.Checkbox('Phone Number', default=False, key='phone', font=main_fs), sg.Checkbox('Ipv4 addr.', default=False, key='ipv4_addr', font=main_fs), sg.Checkbox('Ipv6 addr.', default=False, key='ipv6_addr', font=main_fs)],
+            [sg.Checkbox('Social Security Number', default=False, key='ssn', font=main_fs), sg.Checkbox('Mac Addr.', default=False, key='mac_addr', font=main_fs), sg.Checkbox('Coordinates', default=False, key='latlng', font=main_fs)],
+            [sg.Button('Generate', font=main_fs), sg.Button('Exit', font=main_fs), sg.Button('Select/Deselect ALL', font=main_fs)],
             [sg.Output(size=(65, 20), font=('Helvetica', 18), key='generatedinfo')]
         ]
 
@@ -265,4 +278,5 @@ while True:
         MainWindow = main_window()
 
 
-
+    #elif event == 'Placeholder2':
+        #stuff
